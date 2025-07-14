@@ -10,18 +10,22 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
+  <Target Name="CheckPaths" BeforeTargets="Build">
+    <Message Importance="high" Text="Project directory: $(MSBuildProjectDirectory)" />
+    <Message Importance="high" Text="Checking for ExileCore.dll at: $(MSBuildProjectDirectory)\..\..\..\ExileCore.dll" />
+    <Message Importance="high" Text="File exists (..\..\..\ExileCore.dll): $([System.IO.File]::Exists('$(MSBuildProjectDirectory)\..\..\..\ExileCore.dll'))" />
+    <Message Importance="high" Text="File exists (..\..\ExileCore.dll): $([System.IO.File]::Exists('$(MSBuildProjectDirectory)\..\..\ExileCore.dll'))" />
+    <Error Condition="!Exists('..\..\..\ExileCore.dll') AND !Exists('..\..\ExileCore.dll')" 
+           Text="ExileCore.dll not found! Please ensure ExileCore.dll is in the ExileAPI root folder. Expected locations: $(MSBuildProjectDirectory)\..\..\..\ExileCore.dll OR $(MSBuildProjectDirectory)\..\..\ExileCore.dll" />
+  </Target>
+
   <ItemGroup>
-    <!-- Try multiple common ExileAPI reference patterns -->
     <Reference Include="ExileCore" Condition="Exists('..\..\..\ExileCore.dll')">
       <HintPath>..\..\..\ExileCore.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="ExileCore" Condition="Exists('..\..\ExileCore.dll')">
+    <Reference Include="ExileCore" Condition="!Exists('..\..\..\ExileCore.dll') AND Exists('..\..\ExileCore.dll')">
       <HintPath>..\..\ExileCore.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="ExileCore" Condition="Exists('..\..\..\Dependencies\ExileCore.dll')">
-      <HintPath>..\..\..\Dependencies\ExileCore.dll</HintPath>
       <Private>false</Private>
     </Reference>
     
@@ -29,7 +33,7 @@
       <HintPath>..\..\..\ImGui.NET.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="ImGui.NET" Condition="Exists('..\..\ImGui.NET.dll')">
+    <Reference Include="ImGui.NET" Condition="!Exists('..\..\..\ImGui.NET.dll') AND Exists('..\..\ImGui.NET.dll')">
       <HintPath>..\..\ImGui.NET.dll</HintPath>
       <Private>false</Private>
     </Reference>
@@ -38,16 +42,10 @@
       <HintPath>..\..\..\System.Numerics.Vectors.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="System.Numerics.Vectors" Condition="Exists('..\..\System.Numerics.Vectors.dll')">
+    <Reference Include="System.Numerics.Vectors" Condition="!Exists('..\..\..\System.Numerics.Vectors.dll') AND Exists('..\..\System.Numerics.Vectors.dll')">
       <HintPath>..\..\System.Numerics.Vectors.dll</HintPath>
       <Private>false</Private>
     </Reference>
-  </ItemGroup>
-
-  <!-- Add fallback package references if DLLs not found -->
-  <ItemGroup Condition="!Exists('..\..\..\ExileCore.dll') AND !Exists('..\..\ExileCore.dll') AND !Exists('..\..\..\Dependencies\ExileCore.dll')">
-    <PackageReference Include="ImGui.NET" Version="1.89.7.1" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
 </Project> 
