@@ -8,12 +8,20 @@ using ExileCore.Shared.Nodes;
 namespace ExileCoreShared;
 
 /// <summary>
+/// Settings for the SharedPlugin
+/// </summary>
+public class SharedPluginSettings : ISettings
+{
+    public ToggleNode Enable { get; set; } = new ToggleNode(true);
+}
+
+/// <summary>
 /// Main plugin that registers shared utilities with PluginBridge.
 /// Other plugins can access InputCoordinator, PluginLogger, and ConfigValidator through this.
 /// </summary>
-public class SharedPlugin : IPlugin
+public class SharedPlugin : BaseSettingsPlugin<SharedPluginSettings>
 {
-    public bool Initialise()
+    public override bool Initialise()
     {
         try
         {
@@ -22,8 +30,8 @@ public class SharedPlugin : IPlugin
                 new Func<string, int, bool>(InputCoordinator.RequestControl));
             GameController.PluginBridge.SaveMethod("InputCoordinator.ReleaseControl", 
                 new Action<string>(InputCoordinator.ReleaseControl));
-            GameController.PluginBridge.SaveMethod("InputCoordinator.IsControlledBy", 
-                new Func<string, bool>(InputCoordinator.IsControlledBy));
+            GameController.PluginBridge.SaveMethod("InputCoordinator.IsOwner", 
+                new Func<string, bool>(InputCoordinator.IsOwner));
             GameController.PluginBridge.SaveMethod("InputCoordinator.GetCurrentOwner", 
                 new Func<string>(InputCoordinator.GetCurrentOwner));
 
@@ -51,12 +59,12 @@ public class SharedPlugin : IPlugin
         }
     }
 
-    public void Render()
+    public override void Render()
     {
         // Nothing to render - this is a utility plugin
     }
 
-    public void DrawSettings()
+    public override void DrawSettings()
     {
         // Basic info about registered utilities
         ImGuiExtension.Label("Shared Utilities Status:");
