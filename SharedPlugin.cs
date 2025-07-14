@@ -4,6 +4,7 @@ using ExileCore;
 using ExileCore.Shared.Attributes;
 using ExileCore.Shared.Interfaces;
 using ExileCore.Shared.Nodes;
+using ImGuiNET;
 
 namespace ExileCoreShared;
 
@@ -37,13 +38,13 @@ public class SharedPlugin : BaseSettingsPlugin<SharedPluginSettings>
 
             // Register PluginLogger methods
             GameController.PluginBridge.SaveMethod("PluginLogger.Log", 
-                new Action<string, string>(PluginLogger.Log));
+                new Action<string, string, LogLevel>((pluginName, message, level) => PluginLogger.Log(pluginName, message, level)));
             GameController.PluginBridge.SaveMethod("PluginLogger.LogInfo", 
-                new Action<string>(PluginLogger.LogInfo));
+                new Action<string, string>(PluginLogger.LogInfo));
             GameController.PluginBridge.SaveMethod("PluginLogger.LogWarning", 
-                new Action<string>(PluginLogger.LogWarning));
+                new Action<string, string>(PluginLogger.LogWarning));
             GameController.PluginBridge.SaveMethod("PluginLogger.LogError", 
-                new Action<string>(PluginLogger.LogError));
+                new Action<string, string>(PluginLogger.LogError));
 
             // Register ConfigValidator methods
             GameController.PluginBridge.SaveMethod("ConfigValidator.Validate", 
@@ -67,9 +68,9 @@ public class SharedPlugin : BaseSettingsPlugin<SharedPluginSettings>
     public override void DrawSettings()
     {
         // Basic info about registered utilities
-        ImGuiExtension.Label("Shared Utilities Status:");
-        ImGuiExtension.Label($"InputCoordinator: Active (Current Owner: {InputCoordinator.GetCurrentOwner() ?? "None"})");
-        ImGuiExtension.Label($"PluginLogger: Active (Log file: {System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ExileCorePlugins", "plugin_log.txt")})");
-        ImGuiExtension.Label("ConfigValidator: Active");
+        ImGui.Text("Shared Utilities Status:");
+        ImGui.Text($"InputCoordinator: Active (Current Owner: {InputCoordinator.GetCurrentOwner() ?? "None"})");
+        ImGui.Text($"PluginLogger: Active (Log file: {System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ExileCorePlugins", "plugin_log.txt")})");
+        ImGui.Text("ConfigValidator: Active");
     }
 } 
