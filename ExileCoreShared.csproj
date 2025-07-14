@@ -7,18 +7,33 @@
     <Nullable>enable</Nullable>
     <AssemblyName>ExileCoreShared</AssemblyName>
     <RootNamespace>ExileCoreShared</RootNamespace>
+    
+    <!-- Define ExileAPI root folder - try multiple common locations -->
+    <ExileApiRoot Condition="Exists('..\..\..\ExileCore.dll')">..\..\..\</ExileApiRoot>
+    <ExileApiRoot Condition="'$(ExileApiRoot)' == '' And Exists('..\..\ExileCore.dll')">..\..\</ExileApiRoot>
+    <ExileApiRoot Condition="'$(ExileApiRoot)' == '' And Exists('..\..\..\Dependencies\ExileCore.dll')">..\..\..\Dependencies\</ExileApiRoot>
+    <ExileApiRoot Condition="'$(ExileApiRoot)' == ''">..\..\</ExileApiRoot>
   </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="ExileCore">
-      <HintPath>..\..\..\ExileCore.dll</HintPath>
+      <HintPath>$(ExileApiRoot)ExileCore.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="ImGui.NET">
-      <HintPath>..\..\..\ImGui.NET.dll</HintPath>
+      <HintPath>$(ExileApiRoot)ImGui.NET.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="System.Numerics.Vectors">
-      <HintPath>..\..\..\System.Numerics.Vectors.dll</HintPath>
+      <HintPath>$(ExileApiRoot)System.Numerics.Vectors.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
+
+  <Target Name="CheckExileApiReferences" BeforeTargets="Build">
+    <Error Condition="!Exists('$(ExileApiRoot)ExileCore.dll')" 
+           Text="ExileCore.dll not found at $(ExileApiRoot)ExileCore.dll. Please ensure ExileCore.dll is in the correct location relative to this project." />
+    <Message Importance="normal" Text="Using ExileApi root: $(ExileApiRoot)" />
+  </Target>
 
 </Project> 
