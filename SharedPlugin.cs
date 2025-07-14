@@ -11,10 +11,9 @@ namespace ExileCoreShared;
 /// Main plugin that registers shared utilities with PluginBridge.
 /// Other plugins can access InputCoordinator, PluginLogger, and ConfigValidator through this.
 /// </summary>
-[PluginDescription("Shared utilities for ExileCore plugins", "SharedPlugin", "1.0.0")]
-public class SharedPlugin : BasePlugin
+public class SharedPlugin : IPlugin
 {
-    public override bool Initialise()
+    public bool Initialise()
     {
         try
         {
@@ -52,12 +51,12 @@ public class SharedPlugin : BasePlugin
         }
     }
 
-    public override void Render()
+    public void Render()
     {
         // Nothing to render - this is a utility plugin
     }
 
-    public override void DrawSettings()
+    public void DrawSettings()
     {
         // Basic info about registered utilities
         ImGuiExtension.Label("Shared Utilities Status:");
