@@ -7,21 +7,47 @@
     <Nullable>enable</Nullable>
     <AssemblyName>ExileCoreShared</AssemblyName>
     <RootNamespace>ExileCoreShared</RootNamespace>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="ExileCore">
+    <!-- Try multiple common ExileAPI reference patterns -->
+    <Reference Include="ExileCore" Condition="Exists('..\..\..\ExileCore.dll')">
       <HintPath>..\..\..\ExileCore.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="ImGui.NET">
+    <Reference Include="ExileCore" Condition="Exists('..\..\ExileCore.dll')">
+      <HintPath>..\..\ExileCore.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ExileCore" Condition="Exists('..\..\..\Dependencies\ExileCore.dll')">
+      <HintPath>..\..\..\Dependencies\ExileCore.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="ImGui.NET" Condition="Exists('..\..\..\ImGui.NET.dll')">
       <HintPath>..\..\..\ImGui.NET.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="System.Numerics.Vectors">
+    <Reference Include="ImGui.NET" Condition="Exists('..\..\ImGui.NET.dll')">
+      <HintPath>..\..\ImGui.NET.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <Reference Include="System.Numerics.Vectors" Condition="Exists('..\..\..\System.Numerics.Vectors.dll')">
       <HintPath>..\..\..\System.Numerics.Vectors.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="System.Numerics.Vectors" Condition="Exists('..\..\System.Numerics.Vectors.dll')">
+      <HintPath>..\..\System.Numerics.Vectors.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Add fallback package references if DLLs not found -->
+  <ItemGroup Condition="!Exists('..\..\..\ExileCore.dll') AND !Exists('..\..\ExileCore.dll') AND !Exists('..\..\..\Dependencies\ExileCore.dll')">
+    <PackageReference Include="ImGui.NET" Version="1.89.7.1" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
 </Project> 
