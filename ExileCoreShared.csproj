@@ -11,13 +11,13 @@
 
   <ItemGroup>
     <Reference Include="ExileCore">
-      <HintPath>..\..\ExileCore.dll</HintPath>
+      <HintPath>..\..\..\ExileCore.dll</HintPath>
     </Reference>
     <Reference Include="ImGui.NET">
-      <HintPath>..\..\ImGui.NET.dll</HintPath>
+      <HintPath>..\..\..\ImGui.NET.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics.Vectors">
-      <HintPath>..\..\System.Numerics.Vectors.dll</HintPath>
+      <HintPath>..\..\..\System.Numerics.Vectors.dll</HintPath>
     </Reference>
   </ItemGroup>
 
